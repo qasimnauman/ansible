@@ -1,0 +1,11 @@
+- Create the pem key or it must be present
+
+Run the following command from host
+ssh-copy-id -f "-o IdentityFile <PATH TO PEM FILE>" ubuntu@<INSTANCE-PUBLIC-IP>
+
+Then run the command
+ssh -o ' IdentityFile <PATH TO PEM FILE>' 'ubuntu@<PUBLIC-IP>'
+
+Now you can ssh using this simple command
+ssh username@server-public-IP
+
