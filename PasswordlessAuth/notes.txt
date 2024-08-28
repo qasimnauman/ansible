@@ -9,3 +9,17 @@ ssh -o ' IdentityFile <PATH TO PEM FILE>' 'ubuntu@<PUBLIC-IP>'
 Now you can ssh using this simple command
 ssh username@server-public-IP
 
+---
+Password authentication in EC2 instances
+SSH onto the instance
+go to /etc/ssh/sshd_config.d/
+run sudo vi 60-cloudimg-settings.conf
+update value of Passwordauthentication as yes
+sudo systemctl restart ssh
+
+type sudo passwd username
+set the Password
+
+now logout and ssh back again
+It will ask for the Password, enter and then ssh using the following command
+ssh username@server-public-IP
