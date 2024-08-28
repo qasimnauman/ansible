@@ -23,3 +23,6 @@ set the Password
 now logout and ssh back again
 It will ask for the Password, enter and then ssh using the following command
 ssh username@server-public-IP
+
+----
+With these commands we can use the ansible playbooks without requiring the ssh keys
