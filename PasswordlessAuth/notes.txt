@@ -25,4 +25,12 @@ It will ask for the Password, enter and then ssh using the following command
 ssh username@server-public-IP
 
 ----
-With these commands we can use the ansible playbooks without requiring the ssh keys
+With these commands we can use the ansible playbooks without requiring the ssh key
+
+----
+command to copy folder from one instance to other
+sudo scp -i /path/to/pem-key -r /path/to/source-directory username@<ip-of-instance>:/destination-path
+
+
+command to copy files from one instance to other
+sudo scp -i /path/to/pem-key file1 file2 username@<public-ip>:/destination-path/
