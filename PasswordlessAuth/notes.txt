@@ -33,3 +33,6 @@ sudo scp -i /path/to/pem-key -r /path/to/source-directory username@<ip-of-instan
 
 command to copy files from one instance to other
 sudo scp -i /path/to/pem-key file1 file2 username@<public-ip>:/destination-path/
+
+to assign line no in vim
+:se nu
