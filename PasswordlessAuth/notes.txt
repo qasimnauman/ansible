@@ -36,3 +36,7 @@ sudo scp -i /path/to/pem-key file1 file2 username@<public-ip>:/destination-path/
 
 to assign line no in vim
 :se nu
+
+finding file 
+find keyword
+locate keyword
