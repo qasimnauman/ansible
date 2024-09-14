@@ -1,0 +1,58 @@
+---
+- name: Set up Nginx and deploy the tindog website
+  hosts: all
+  become: true
+  tasks:
+    - name: Update APT package list
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install Nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+
+    - name: Clone the tindog website repository
+      ansible.builtin.git:
+        repo: https://github.com/qasimnauman/tindog_website.git
+        dest: /var/www/tindog_website
+        version: HEAD
+
+    - name: Create Nginx configuration file for tindog
+      ansible.builtin.copy:
+        dest: /etc/nginx/sites-available/tindog.conf
+        content: |
+          server {
+              listen 82;
+              listen [::]:82;
+
+              server_name example.ubuntu.com;
+
+              root /var/www/tindog_website;
+              index index.html;
+
+              location / {
+                  try_files $uri $uri/ =404;
+              }
+          }
+
+    - name: Enable tindog site by creating symlink
+      ansible.builtin.file:
+        src: /etc/nginx/sites-available/tindog.conf
+        dest: /etc/nginx/sites-enabled/tindog.conf
+        state: link
+
+    - name: Test Nginx configuration
+      ansible.builtin.command:
+        cmd: nginx -t
+      register: nginx_test_output
+      ignore_errors: true
+
+    - name: Display Nginx test output
+      ansible.builtin.debug:
+        msg: "{{ nginx_test_output.stdout }}"
+
+    - name: Restart Nginx service
+      ansible.builtin.service:
+        name: nginx
+        state: restarted

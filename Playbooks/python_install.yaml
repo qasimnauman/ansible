@@ -1,0 +1,21 @@
+---
+- name: Install Python 3 on Ubuntu
+  hosts: all
+  become: true
+  tasks:
+    - name: Updating System
+      ansible.builtin.apt:
+        update_cache: yes
+      
+    - name: Installing Python
+      ansible.builtin.command:
+        cmd: apt install python3 -y
+
+    - name: Display Python version
+      ansible.builtin.command:
+        cmd: python3 --version
+      register: python_version_output
+
+    - name: Show Python version
+      ansible.builtin.debug:
+        msg: "Python version installed: {{ python_version_output.stdout }}"
