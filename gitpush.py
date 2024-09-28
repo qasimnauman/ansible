@@ -1,8 +1,14 @@
 import subprocess
 
 commitmessage = input("Enter commit message : ")
-branchname = subprocess.run(['git', 'branch', '--show-current'], stdout=subprocess.PIPE)
-branchname = branchname.stdout.decode().strip()
+branchname = input("Enter branch name (default: main) : ",)
+if branchname == "":
+    branchname = "main"
+
+if branchname != "main":
+    if subprocess.run(['git', 'branch', '--show-current'], stdout=subprocess.PIPE).stdout.decode().strip() == branchname:
+        subprocess.run(['git', 'checkout', '-b', branchname])
+        print(f"Switched to a new branch '{branchname}'")
 
 addcmd = ['git', 'add', '.']
 commitcmd = ['git', 'commit', '-m', commitmessage]
