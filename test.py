@@ -1,12 +1,18 @@
 import subprocess
 
-commitmessage = input("Enter commit message : ")
-branchname = input("Enter branch name (default: main) : ",)
+commitmessage = input("Enter commit message: ")
+branchname = input("Enter branch name (default: main): ")
+
 if branchname == "":
     branchname = "main"
 
-if branchname != "main":
-    if subprocess.run(['git', 'branch', '--show-current'], stdout=subprocess.PIPE).stdout.decode().strip() == branchname:
+current_branch = subprocess.run(['git', 'branch', '--show-current'], stdout=subprocess.PIPE).stdout.decode().strip()
+
+if branchname != current_branch:
+    result = subprocess.run(['git', 'checkout', branchname], stdout=subprocess.PIPE)
+    
+    if result.returncode != 0:
+        print(f"Branch '{branchname}' does not exist. Creating a new branch.")
         subprocess.run(['git', 'checkout', '-b', branchname])
         print(f"Switched to a new branch '{branchname}'")
 
@@ -21,3 +27,5 @@ def executecommands(commands):
         subprocess.run(cmd)
 
 executecommands(commands)
+
+print(f"Changes have been committed and pushed to branch: {branchname}")
