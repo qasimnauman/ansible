@@ -8,7 +8,7 @@
         key_name: "keyname"
         name: "test-instance-launch-ansible"
         vpc_subnet_id: subnet-213124
-        instance_type: t2.micro
+        instance_type: "instance-type"
         security_group: sg-idddd
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
