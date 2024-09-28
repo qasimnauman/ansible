@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: start an instance with a public IP address
+      amazon.aws.ec2_instance:
+        region: us-east-1
+        key_name: "keyname"
+        name: "test-instance-launch-ansible"
+        vpc_subnet_id: subnet-213124
+        instance_type: t2.micro
+        security_group: sg-idddd
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        network_interfaces:
+          - assign_public_ip: true
+        image_id: ami-213141
+        tags:
+          Environment: Testing
