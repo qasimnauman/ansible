@@ -1,0 +1,23 @@
+- name: Conditionally schedule daily shutdown on Ubuntu instances
+  hosts: ubuntu_instances
+  become: yes
+  vars:
+    shutdown_time: "22:00"
+    enable_shutdown: true
+
+  tasks:
+    - name: Parse shutdown hour and minute
+      ansible.builtin.set_fact:
+        shutdown_hour: "{{ shutdown_time.split(':')[0] }}"
+        shutdown_minute: "{{ shutdown_time.split(':')[1] }}"
+
+    - name: Set up a cron job to shut down the system at specified time
+      ansible.builtin.cron:
+        name: "Daily shutdown at {{ shutdown_time }}"
+        minute: "{{ shutdown_minute }}"
+        hour: "{{ shutdown_hour }}"
+        job: "/sbin/shutdown -h now"
+        state: present
+      when:
+        - enable_shutdown
+        - ansible_hostname in ["host1", "host2"]

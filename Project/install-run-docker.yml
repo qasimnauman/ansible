@@ -1,0 +1,42 @@
+- name: Set up passwordless SSH
+  hosts: Ubuntu
+  become: yes
+
+  tasks:
+    - name: Update the system
+      ansible.builtin.command: "sudo apt update -y"
+      ignore_errors: yes
+
+    - name: Install Docker
+      ansible.builtin.command: "sudo apt install docker.io -y"
+      ignore_errors: yes
+
+- name: Install Docker on RHEL
+  hosts: RHEL
+  become: yes
+
+  tasks:
+    - name: Update the system
+      ansible.builtin.command: "sudo yum update -y"
+      ignore_errors: yes
+
+    - name: Install Dependencies
+      ansible.builtin.command: "sudo yum install -y yum-utils device-mapper-persistent-data lvm2"
+      ignore_errors: yes
+    
+    - name: Add Docker Repository
+      ansible.builtin.command: "sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo"
+      ignore_errors: yes
+
+    - name: Install Docker
+      ansible.builtin.command: "sudo yum install docker-ce -y"
+      ignore_errors: yes
+
+- name: Run the Notes App on port 9000 on outside the container
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Run the Notes App
+      ansible.builtin.command: "sudo docker run -d -p 9000:8000 --name notes-app qasimnauman/mynotesapp:latest"
+      ignore_errors: yes
