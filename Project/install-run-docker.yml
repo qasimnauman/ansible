@@ -1,5 +1,6 @@
-- name: Set up passwordless SSH
-  hosts: Ubuntu
+---
+- name: Set up passwordless SSH and install Docker on Ubuntu
+  hosts: ubuntu-1
   become: yes
 
   tasks:
@@ -11,8 +12,16 @@
       ansible.builtin.command: "sudo apt install docker.io -y"
       ignore_errors: yes
 
+    - name: Ensure Docker service is started
+      ansible.builtin.command: "sudo systemctl start docker"
+      ignore_errors: yes
+
+    - name: Ensure Docker service is enabled
+      ansible.builtin.command: "sudo systemctl enable docker"
+      ignore_errors: yes
+
 - name: Install Docker on RHEL
-  hosts: RHEL
+  hosts: rhel-1
   become: yes
 
   tasks:
@@ -32,11 +41,23 @@
       ansible.builtin.command: "sudo yum install docker-ce -y"
       ignore_errors: yes
 
+    - name: Ensure Docker service is started
+      ansible.builtin.command: "sudo systemctl start docker"
+      ignore_errors: yes
+
+    - name: Ensure Docker service is enabled
+      ansible.builtin.command: "sudo systemctl enable docker"
+      ignore_errors: yes
+
 - name: Run the Notes App on port 9000 on outside the container
-  hosts: all
+  hosts: ubuntu-1:rhel-1
   become: yes
 
   tasks:
+    - name: Remove existing Notes App container if it exists
+      ansible.builtin.command: "sudo docker rm -f notes-app"
+      ignore_errors: yes
+
     - name: Run the Notes App
-      ansible.builtin.command: "sudo docker run -d -p 9000:8000 --name notes-app qasimnauman/mynotesapp:latest"
+      ansible.builtin.command: "sudo docker run -d --name notes-app -p 9000:8000 qasimnauman/mynotesapp:latest"
       ignore_errors: yes

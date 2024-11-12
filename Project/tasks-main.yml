@@ -1,25 +1,26 @@
 - name: Create EC2 SG
   amazon.aws.ec2_security_group:
-    name: sg-ec2
+    name: ec2-group
     description: SG for EC2 instances using Ansible
     vpc_id: "{{ VPC_ID }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     rules:
       - proto: tcp
         from_port: 22
         to_port: 22
-        cidr: 0.0.0.0/0
-    
+        cidr_ip: 0.0.0.0/0
+
       - proto: tcp
         from_port: 80
         to_port: 9000
-        cidr: 0.0.0.0/0
-        group_name: sg-ec2
+        cidr_ip: 0.0.0.0/0
 
     rules_egress:
       - proto: -1
         from_port: 0
         to_port: 0
-        cidr: 0.0.0.0/0
+        cidr_ip: 0.0.0.0/0
   register: ec2_sg
 
 - name: Output SG ID

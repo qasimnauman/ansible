@@ -1,8 +1,8 @@
 - name: Conditionally schedule daily shutdown on Ubuntu instances
-  hosts: ubuntu_instances
+  hosts: all
   become: yes
   vars:
-    shutdown_time: "22:00"
+    shutdown_time: "20:40"
     enable_shutdown: true
 
   tasks:
@@ -20,4 +20,4 @@
         state: present
       when:
         - enable_shutdown
-        - ansible_hostname in ["host1", "host2"]
+        - ansible_hostname in ["ubuntu-1"]
